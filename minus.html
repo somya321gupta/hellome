@@ -1,0 +1,201 @@
+<html>
+	<head>
+		<title>minus</title>
+		<style>
+			body { margin: 0;  }
+			canvas { width: 100%; height: 100% }
+		</style>
+	</head>
+	<body>
+		<script src="js/three.js"></script>
+		<script src="js/examples/js/controls/DragControls.js"></script>
+		<script>			
+					
+					var camera, scene, renderer;
+					//camera
+					camera = new THREE.PerspectiveCamera(70, window.innerWidth / window.innerHeight, 1,1000);
+					camera.position.z=400;
+					
+					//scene
+					scene = new THREE.Scene();
+					
+					//Renderer
+					var renderer = new THREE.WebGLRenderer();
+					renderer.setSize(window.innerWidth, window.innerHeight);
+					renderer.setClearColor(0xffee88);
+					document.body.appendChild(renderer.domElement);
+					
+					//Minus texture
+						var texture = new THREE.TextureLoader().load( "minus.jpg" );
+						texture.wrapS = THREE.RepeatWrapping;
+						texture.wrapT = THREE.RepeatWrapping;
+						texture.repeat.set( 6,6 );
+						
+					
+						
+					//Plus texture
+						var texture2 = new THREE.TextureLoader().load( "plus.jpg" );
+						texture2.wrapS = THREE.RepeatWrapping;
+						texture2.wrapT = THREE.RepeatWrapping;
+						texture2.repeat.set( 4, 4 );
+					
+					//Light
+    				var light1 = new THREE.HemisphereLight(0xffffff, 0.5);
+ 					scene.add(light1);
+ 					
+ 					//geometry small sphere
+					var geometry = new THREE.SphereGeometry( 20,100,100,Math.PI/2, Math.PI*2, 0, Math.PI );						
+					//geom big sphere
+					var geom = new THREE.SphereGeometry( 50,100,100,Math.PI/2, Math.PI*2, 0, Math.PI );
+					//material1 color blue negative
+					var material = new THREE.MeshBasicMaterial( { color: 0x2980b9,map:texture} );
+					//material2 color red positive	
+					var material2 = new THREE.MeshBasicMaterial( { color: 0xaa0000,map:texture2} );
+					//negative charges
+					var sphere_n1=new THREE.Mesh(geometry,material);
+					var sphere_n2=new THREE.Mesh(geometry,material);
+					var sphere_n3=new THREE.Mesh(geometry,material);
+
+					//positive charges
+					var sphere_p1 = new THREE.Mesh( geometry, material2 );
+					var sphere_p2 = new THREE.Mesh( geometry, material2 );
+					var sphere_p3 = new THREE.Mesh( geometry, material2 );
+					
+					//big positive charge
+					var sphere_p = new THREE.Mesh(geom, material2);
+					//big negative charge
+					var sphere_n = new THREE.Mesh(geom, material);
+					objects=[sphere_n,sphere_p];
+					//Controls
+					controls = new THREE.DragControls(objects,camera,renderer.domElement );
+					
+				
+					
+					sphere_p.position.x=-400;
+					sphere_n.position.x=-400;
+					sphere_n.position.y=200;
+					
+					sphere_n1.position.x=80;
+					sphere_n2.position.x=200;
+					sphere_n2.position.y=100;
+					sphere_n3.position.x=200;
+					sphere_n3.position.y=-100;
+					
+					sphere_p1.position.x=100;
+					sphere_p1.position.y=80;
+					sphere_p2.position.x=250;
+					sphere_p3.position.x=100;
+					sphere_p3.position.y=-125;
+					
+					scene.add(sphere_n);
+					scene.add(sphere_p);
+					scene.add(sphere_n1);
+					scene.add(sphere_n2);
+					scene.add(sphere_n3);
+					scene.add(sphere_p1);
+					scene.add(sphere_p2);
+					scene.add(sphere_p3);
+					
+					
+					
+					var geo = new THREE.Geometry();
+geo.vertices.push( new THREE.Vector3( -50, 200, 0 ) );
+geo.vertices.push( new THREE.Vector3( 400, 200, 0 ) );
+geo.vertices.push( new THREE.Vector3( 400, -200, 0 ) );
+geo.vertices.push( new THREE.Vector3( -50, -200, 0 ) );
+geo.vertices.push( new THREE.Vector3( -50, 200, 0 ) ); 
+
+// material
+var material3 = new THREE.LineBasicMaterial( { color: 0x000000, linewidth: 10} );
+
+// line
+var line = new THREE.Line( geo, material3 );
+scene.add( line );
+
+
+	function reset(){
+				sphere_p.position.x=-400;
+					sphere_n.position.x=-400;
+					sphere_n.position.y=200;
+					
+					sphere_n1.position.x=80;
+					sphere_n2.position.x=200;
+					sphere_n2.position.y=100;
+					sphere_n3.position.x=200;
+					sphere_n3.position.y=-100;
+					
+					sphere_p1.position.x=100;
+					sphere_p1.position.y=80;
+					sphere_p2.position.x=250;
+					sphere_p3.position.x=100;
+					sphere_p3.position.y=-125;
+					}
+				
+
+
+					
+					function render(){
+					if(sphere_p.position.x<-100)
+					{
+					}
+					if(sphere_p.position.x>=-100)
+					{
+						if(sphere_n1.position.x>-25)
+						{
+						sphere_n1.position.x-=0.8;
+						}
+						if(sphere_n2.position.x>-25)
+						{
+						sphere_n2.position.x-=0.8;
+						sphere_n3.position.x-=0.8;
+						}
+						if(sphere_p1.position.x<350)
+						{
+						sphere_p1.position.x+=0.8;
+						sphere_p3.position.x+=0.8;
+						}
+						
+						if(sphere_p2.position.x<350)
+						{
+						sphere_p2.position.x+=0.8;
+						}
+						
+					}
+					
+					if(sphere_n.position.x<-100)
+					{
+					}
+					if(sphere_n.position.x>=-100)
+					{
+						if(sphere_p1.position.x>-25)
+						{
+						sphere_p1.position.x-=0.8;
+						sphere_p3.position.x-=0.8;
+						}
+						if(sphere_p2.position.x>-25)
+						{
+						sphere_p2.position.x-=0.8;
+						}
+						if(sphere_n1.position.x<350)
+						{
+						sphere_n1.position.x+=0.8;
+						}
+						
+						if(sphere_n2.position.x<350)
+						{
+						sphere_n2.position.x+=0.8;
+						sphere_n3.position.x+=0.8;
+						}
+						
+					}
+					
+
+				
+    				requestAnimationFrame(render);
+    				renderer.render(scene, camera);
+				  }
+  render();
+		
+		</script>
+	</body>
+</html>
